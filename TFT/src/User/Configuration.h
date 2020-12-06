@@ -25,7 +25,7 @@
  *
  * Default value is: 1 for LED_OFF
 */
-#define STARTUP_KNOB_LED_COLOR 6         // LED_OFF
+#define STARTUP_KNOB_LED_COLOR 0         // LED_OFF
 #define KEEP_KNOB_LED_COLOR_MARLIN_MODE  // Keeps the LED state in Marlin Mode
 
 /**
@@ -44,9 +44,9 @@
  *              6: LCD_DIM_300_SECONDS,  7: LCD_DIM_CUSTOM_SECONDS
  *
  */
-#define DEFAULT_LCD_BRIGHTNESS      10  // 10: LCD_100_PERCENT - Brightness value from list
-#define DEFAULT_LCD_IDLE_BRIGHTNESS 2   // 2: LCD_10_PERCENT - Brightness value from list
-#define DEFAULT_LCD_IDLE_TIMER      3   // 0: LCD_DIM_OFF
+#define DEFAULT_LCD_BRIGHTNESS      11  // 11: LCD_100_PERCENT - Brightness value from list
+#define DEFAULT_LCD_IDLE_BRIGHTNESS 3   // 3: LCD_10_PERCENT - Brightness value from list
+#define DEFAULT_LCD_IDLE_TIMER      0   // 0: LCD_DIM_OFF
 #define LCD_DIM_CUSTOM_SECONDS      600 // Custom value in seconds. Will be used if LCD_DIM_CUSTOM_SECONDS is set as idle timer.
 
 //===========================================================================
@@ -62,8 +62,8 @@
  *          6: MAGENTA,    7: YELLOW,      8: ORANGE,  9: PURPLE,   10: LIME,  11: BROWN,
  *         12: DARKBLUE,  13: DARKGREEN,  14: GRAY,   15: DARKGRAY
  */
-#define ST7920_BKCOLOR 15
-#define ST7920_FNCOLOR 10
+#define MARLIN_BKCOLOR 1
+#define MARLIN_FNCOLOR 0
 
 /**
  * Text displayed at the top of the TFT in Marlin Mode.
@@ -80,7 +80,7 @@
  * Options:  0: Disabled. RECOMMENDED FOR TFT24
  *           1: Enabled Marlin Fullscreen mode.
  */
-#define DEFAULT_ST7920_FULLSCREEN_MODE 1 // 0: Disabled. RECOMMENDED FOR TFT24
+#define DEFAULT_ST7920_FULLSCREEN_MODE 0 // 0: Disabled. RECOMMENDED FOR TFT24
 
 /**
  * Keep Serial always On (ONLY SUPPORTED ON TFT24 V1.1, TFT35 V3.0, AND TFT28 V3.0)
@@ -91,7 +91,7 @@
  *
  * Options:  0: Disabled    1: Enabled
  */
-#define SERIAL_ALWAYS_ON 1  // Default: 0 (Disabled)
+#define SERIAL_ALWAYS_ON 0  // Default: 0 (Disabled)
 
 //===========================================================================
 //========================== Touch Mode Settings ============================
@@ -105,7 +105,7 @@
  *
  * :[2400, 9600, 19200, 38400, 57600, 115200, 250000, 500000, 1000000]
  */
-#define BAUDRATE 250000
+#define BAUDRATE 115200
 
 /**
  * Default Primary Language (for Touch-Mode only)
@@ -113,6 +113,7 @@
  * Options: ENGLISH, CHINESE, RUSSIAN, JAPANESE, ARMENIAN, GERMAN, CZECH,
  *          SPANISH, FRENCH, PORTUGUESE, ITALIAN, POLISH, SLOVAK, DUTCH,
  *          HUNGARIAN, TURKISH, GREEK, SLOVENIAN, CATALAN, TRAD_CHINESE,
+ *          UKRAINIAN,
  */
 #define DEFAULT_LANGUAGE ENGLISH
 
@@ -125,7 +126,7 @@
 /**
  * Show bootscreen when starting up
  */
-//#define SHOW_BTT_BOOTSCREEN
+#define SHOW_BTT_BOOTSCREEN
 
 /**
  * The duration and frequency for the UI feedback sound.
@@ -135,7 +136,7 @@
  * Note: Test audio output with the G-Code:
  * M300 S<frequency Hz> P<duration ms>
  */
-#define BUZZER_FREQUENCY_DURATION_MS 10 // Default 20
+#define BUZZER_FREQUENCY_DURATION_MS 20 // Default 20
 #define BUZZER_FREQUENCY_HZ 10000       // Default 10000, 20Hz to 60KHz
 #define BUZZER_STOP_LEVEL false
 
@@ -181,10 +182,9 @@
 #define FAN_CTRL_NUM 0    // set in 1~2
 #define MIXING_EXTRUDER 0 // set default 0, for mixing_extruder 1 (this option turns off autodetection of the number of extruders)
 
-//                         PLA      PETG      ABS
-#define PREHEAT_LABELS   {"PLA",   "PETG",   "ABS"}
-#define PREHEAT_BED      {60,      80,       100}
-#define PREHEAT_HOTEND   {200,     240,      230}
+#define PREHEAT_LABELS   {"PLA", "PETG", "ABS", "WOOD", "TPU", "NYLON"}
+#define PREHEAT_HOTEND   {200,   240,    230,   170,    220,   250}
+#define PREHEAT_BED      {60,    70,     90,    50,     50,    90}
 
 #define HEAT_MAX_TEMP    {275,       275,       275,       275,       275,       275,       150,    60}   //max temperature can be set
 #define HEAT_SIGN_ID     {"T0:",     "T1:",     "T2:",     "T3:",     "T4:",     "T5:",     "B:",   "C:"}
@@ -227,9 +227,9 @@
 #define X_MIN_POS 0
 #define Y_MIN_POS 0
 #define Z_MIN_POS 0
-#define X_MAX_POS 310
-#define Y_MAX_POS 310
-#define Z_MAX_POS 380
+#define X_MAX_POS 235
+#define Y_MAX_POS 235
+#define Z_MAX_POS 250
 
 // Specify a pause position as { X, Y, Z_raise }
 #define NOZZLE_PAUSE_RETRACT_LENGTH 15   // (mm)
@@ -246,6 +246,12 @@
  * Acts here like manual pause
  */
 #define NOZZLE_PAUSE_M600_M601
+
+/* M701, M702 ; Marlin filament load unload gcodes support
+ * FILAMENT_LOAD_UNLOAD_GCODES option on Marlin configuration_adv.h need to be uncommented
+ * Adds a submenu to the movement menu for selecting load and unload actions
+ */
+#define LOAD_UNLOAD_M701_M702
 
 /**
  * Auto save/load Bed Leveling data
@@ -484,8 +490,8 @@
 #define CUSTOM_5_GCODE "M501\n"
 #define CUSTOM_6_LABEL "EEPROM Defaults"
 #define CUSTOM_6_GCODE "M502\n"
-#define CUSTOM_7_LABEL "Firmware Update"
-#define CUSTOM_7_GCODE "M997\n"
+//#define CUSTOM_7_LABEL "Custom7"
+//#define CUSTOM_7_GCODE "M105\n"
 //#define CUSTOM_8_LABEL "Custom8"
 //#define CUSTOM_8_GCODE "M105\n"
 //#define CUSTOM_9_LABEL "Custom9"
@@ -509,15 +515,12 @@
  * Enable Start & End G-code in SETTINGS -> FEATURE menu.
  */
 // Start G-code - run this G-code before starting print
-//#define PRINT_START_GCODE "G28 XY R10\n" // Raise Z 10mm before homing X & Y
-#define PRINT_START_GCODE "" 
+#define PRINT_START_GCODE "G28 XY R10\n" // Raise Z 10mm before homing X & Y
 
 // End G-code - run this G-code after finishing print
-//#define PRINT_END_GCODE "G90\nG1 E-4\nG92 E0\nM18\n" // Switch to absolute positioning, reduce filament pressure by performing small retract, reset extruder position, disable steppers
-#define PRINT_END_GCODE ""
+#define PRINT_END_GCODE "G90\nG1 E-4\nG92 E0\nM18\n" // Switch to absolute positioning, reduce filament pressure by performing small retract, reset extruder position, disable steppers
 
 // Cancel G-code - run this G-code after canceling print
-//#define PRINT_CANCEL_GCODE "G28 XY R10\n" // Home XY and raise Z 10mm
-#define PRINT_CANCEL_GCODE ""
+#define PRINT_CANCEL_GCODE "G28 XY R10\n" // Home XY and raise Z 10mm
 
 #endif
